@@ -24,7 +24,7 @@ class Deck:
             self.cards.remove(selected_card)
         return your_cards
 
-def hand_value(self, your_cards):
+def hand_value(your_cards):
     hand_value = 0
     ace = ''
     for card in your_cards:
@@ -61,18 +61,39 @@ def hand_value(self, your_cards):
                     hand_value += card[0]
             else:
                 hand_value += card[0]
-                
+
     return hand_value
 
+def main():
+
+    print("Welcome to this simple blackjack game!")
+    print()
+    print("Would you like to have fun [type: 'y']?")
+    start = input("Or would you like to be boring [type: 'n']?")
+    print()
+
+    if start.lower() == 'y':
+# Create a deck
+    # Deal two cards to the dealer and two cards to the player
+        deck = Deck()
+        player_cards = deck.pull(2)
+        dealer_cards = deck.pull(2)
+# Reveal the two cards that the player has
+    # Reveal only one card the dealer has
+        print("The dealer has the following face up card:")
+        print(dealer_cards[0])
+        print("")
+        print("You have the following cards:")
+        print(player_cards)
+
+# Ask the player if he wants to take another card (hit) or
+    # not take another card (stand)
+
+    # If player asks for another card, give it to them and then
+        # check if the hand value is greater than 21
+        while
+    else:
+        print("Thanks! Have a nice day!")
 
 
-
-deck = Deck()
-print(deck.cards)
-print()
-#cards = deck.pull(2)
-test_cards = [('A','d'), ('K', 'h'), (5,'d')]
-#print(cards)
-#print()
-#print(deck.cards)
-print(deck.hand_value(test_cards))
+main()
