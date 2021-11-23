@@ -32,7 +32,7 @@ def hand_value(your_cards):
            # Card drawn is a Face Card
         if card[0] == 'J' or card[0] == 'Q' or card[0] == 'K':
             if hand_value + 10 > 21:
-                if ace == 'y':
+                if ace == '1':
                     # We don't add anything because we would add 10
                     # for the face card and then subtract 10
                     # to reduce the ace's value from 11 to 1
@@ -45,7 +45,7 @@ def hand_value(your_cards):
         # Case 2:
             # Card drawn is an Ace
         elif card[0] == 'A':
-            ace = 'y'
+            ace += '1'
             if hand_value + 11 > 21:
                 hand_value += 1
             else:
@@ -55,14 +55,25 @@ def hand_value(your_cards):
             # Card drawn is a numbered card
         else:
             if hand_value + card[0] > 21:
-                if ace == 'y':
+                if ace == '1':
+                    # We only need to do this once since every ace drawn
+                    # after the first one will always have a value of 1.
+                    # We effectively have to add some random string value
+                    # so that we never go back into this part of the conditional.
                     hand_value = hand_value + card[0] - 10
+                    ace = 'Off'
                 else:
                     hand_value += card[0]
             else:
                 hand_value += card[0]
 
     return hand_value
+
+def bust(hand_value):
+    return hand_value > 21
+
+def twenty_one(hand_value):
+    return hand_value == 21
 
 def main():
 
@@ -73,25 +84,76 @@ def main():
     print()
 
     if start.lower() == 'y':
-# Create a deck
-    # Deal two cards to the dealer and two cards to the player
+        # Initializing the deck and player/dealer cards
         deck = Deck()
         player_cards = deck.pull(2)
         dealer_cards = deck.pull(2)
-# Reveal the two cards that the player has
-    # Reveal only one card the dealer has
+
+        # Compute initial value of dealer + player hands
+        player_hand_value = hand_value(player_cards)
+        dealer_hand_value = hand_value(dealer_cards)
+
+        # Only reveal one of the dealer's cards
         print("The dealer has the following face up card:")
         print(dealer_cards[0])
         print("")
-        print("You have the following cards:")
-        print(player_cards)
 
-# Ask the player if he wants to take another card (hit) or
-    # not take another card (stand)
+        ################### Player logic ###################
+        while player_hand_value < 21:
 
-    # If player asks for another card, give it to them and then
-        # check if the hand value is greater than 21
-        while
+            print("You have the following cards:")
+            print(player_cards)
+            print("")
+            print("Your hand value is {}".format(str(player_hand_value)))
+
+            player_decision = input(("Would you like to hit [press 'h'] "
+            "or stand [press 's']?"))
+            print("")
+
+            if player_decision == 's':
+                break
+            else:
+                player_cards = player_cards + deck.pull(1)
+                player_hand_value = hand_value(player_cards)
+
+        if win(player_hand_value):
+            print("Looks like you're too good at this game!")
+            print("You have 21 with the following cards:")
+            print(player_cards)
+
+
+        if bust(player_hand_value):
+            print("Sorry you busted with the following cards:")
+            print(player_cards)
+            print("Your hand value of {} is greater than 21!".format(str(player_hand_value)))
+
+        ################### Dealer logic ###################
+        # Check if dealer's cards are >= 17
+        if dealer_hand_value >= 17:
+            if bust(player_hand_value):
+                print("Sorry, the dealer won with a hand value of:")
+                print(dealer_hand_value)
+                print("")
+                print("You had a hand value of:")
+                print(player_hand_value)
+            elif player_hand_value > dealer_hand_value:
+                print("Amazing, you won with a hand value of:")
+                print(player_hand_value)
+                print("")
+                print("The dealer had a hand value of:")
+                print(dealer_hand_value)
+            elif player_hand_value < dealer_hand_value:
+                print("Sorry, the dealer won with a hand value of:")
+                print(dealer_hand_value)
+                print("")
+                print("You had a hand value of:")
+                print(player_hand_value)
+            else:
+                print("You and the dealer tied!")
+                print("Dealer hand value: {}".format(str(dealer_hand_value)))
+                print("Your hand value: {}".format(str(player_hand_value)))
+
+
     else:
         print("Thanks! Have a nice day!")
 
