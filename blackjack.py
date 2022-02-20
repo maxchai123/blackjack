@@ -116,7 +116,7 @@ def main():
                 player_cards = player_cards + deck.pull(1)
                 player_hand_value = hand_value(player_cards)
 
-        if win(player_hand_value):
+        if twenty_one(player_hand_value):
             print("Looks like you're too good at this game!")
             print("You have 21 with the following cards:")
             print(player_cards)
@@ -129,6 +129,10 @@ def main():
 
         ################### Dealer logic ###################
         # Check if dealer's cards are >= 17
+        while dealer_hand_value < 17:
+            dealer_cards = dealer_cards + deck.pull(1)
+            dealer_hand_value = hand_value(dealer_cards)
+
         if dealer_hand_value >= 17:
             if bust(player_hand_value):
                 print("Sorry, the dealer won with a hand value of:")
